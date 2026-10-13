@@ -46,7 +46,7 @@ final class PdoDatabase implements Database {
 	 * @param PdoDsn|null $pdoDsn (optional) the PDO-specific DSN that may be used to establish the connection
 	 * @param bool|null (optional) $preserveOldState whether the old state of the connection should be preserved
 	 */
-	private function __construct(PDO $pdoInstance = null, PdoDsn $pdoDsn = null, $preserveOldState = null) {
+	private function __construct(?PDO $pdoInstance = null, ?PdoDsn $pdoDsn = null, $preserveOldState = null) {
 		// if the old state of the connection must be stored somewhere
 		if ($preserveOldState) {
 			// prepare an array for that task
@@ -114,7 +114,7 @@ final class PdoDatabase implements Database {
 		return new static(null, $pdoDataSource->toDsn());
 	}
 
-	public function select($query, array $bindValues = null) {
+	public function select($query, ?array $bindValues = null) {
 		return $this->selectInternal(function ($stmt) {
 			/** @var PDOStatement $stmt */
 
@@ -124,7 +124,7 @@ final class PdoDatabase implements Database {
 		}, $query, $bindValues);
 	}
 
-	public function selectValue($query, array $bindValues = null) {
+	public function selectValue($query, ?array $bindValues = null) {
 		return $this->selectInternal(function ($stmt) {
 			/** @var PDOStatement $stmt */
 
@@ -134,7 +134,7 @@ final class PdoDatabase implements Database {
 		}, $query, $bindValues);
 	}
 
-	public function selectRow($query, array $bindValues = null) {
+	public function selectRow($query, ?array $bindValues = null) {
 		return $this->selectInternal(function ($stmt) {
 			/** @var PDOStatement $stmt */
 
@@ -144,7 +144,7 @@ final class PdoDatabase implements Database {
 		}, $query, $bindValues);
 	}
 
-	public function selectColumn($query, array $bindValues = null) {
+	public function selectColumn($query, ?array $bindValues = null) {
 		return $this->selectInternal(function ($stmt) {
 			/** @var PDOStatement $stmt */
 
@@ -255,7 +255,7 @@ final class PdoDatabase implements Database {
 		return $this->exec($statement, $bindValues);
 	}
 
-	public function exec($statement, array $bindValues = null) {
+	public function exec($statement, ?array $bindValues = null) {
 		$this->normalizeConnection();
 
 		try {
@@ -373,7 +373,7 @@ final class PdoDatabase implements Database {
 		return $this->profiler;
 	}
 
-	public function setProfiler(Profiler $profiler = null) {
+	public function setProfiler(?Profiler $profiler = null) {
 		$this->profiler = $profiler;
 
 		return $this;
@@ -523,7 +523,7 @@ final class PdoDatabase implements Database {
 	 * @param array|null $newAttributes the new attributes to set
 	 * @param array|null $oldAttributes where old configurations may be saved to restore them later
 	 */
-	private function configureConnection(array &$newAttributes = null, array &$oldAttributes = null) {
+	private function configureConnection(?array &$newAttributes = null, ?array &$oldAttributes = null) {
 		// if a connection is available
 		if (isset($this->pdo)) {
 			// if there are attributes that need to be applied
@@ -576,7 +576,7 @@ final class PdoDatabase implements Database {
 	 * @param array|null $bindValues (optional) the values to bind as replacements for the `?` characters in the query
 	 * @return mixed whatever the callback has extracted and returned from the result set
 	 */
-	private function selectInternal(callable $callback, $query, array $bindValues = null) {
+	private function selectInternal(callable $callback, $query, ?array $bindValues = null) {
 		$this->normalizeConnection();
 
 		try {
