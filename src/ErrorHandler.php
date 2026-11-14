@@ -39,6 +39,7 @@ final class ErrorHandler {
 	 * Handles the specified exception thrown by PDO and tries to throw a more specific exception or error instead
 	 *
 	 * @param PDOException $e the exception thrown by PDO
+	 * @return never
 	 * @throws Exception
 	 * @throws Error
 	 */
